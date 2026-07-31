@@ -240,6 +240,30 @@ async function get_comparation(pool,user,user_content){
         })
     } else {
         // existe a disciplina
+
+        // verificar alteração nas faltas
+        if(nv_disc.faltas != disc.faltas){
+            if(nv_disc.faltas > disc.faltas){
+                mensagens.push({
+                    to: user.user_chatid,
+                    tipo:'telegram',
+                    content:
+                        `🚫 *Falta lançada\\!*\n\n` +
+                        `📘 Disciplina: \`${escapeMarkdownV2Code(nv_disc.nome)}\`\n` +
+                        `📊 Faltas: ${escapeMarkdownV2(disc.faltas)} ➡️ ${escapeMarkdownV2(nv_disc.faltas)}`
+                })
+            } else {
+                mensagens.push({
+                    to: user.user_chatid,
+                    tipo:'telegram',
+                    content:
+                        `♻️ *Faltas atualizadas\\!*\n\n` +
+                        `📘 Disciplina: \`${escapeMarkdownV2Code(nv_disc.nome)}\`\n` +
+                        `📊 Faltas: ${escapeMarkdownV2(disc.faltas)} ➡️ ${escapeMarkdownV2(nv_disc.faltas)}`
+                })
+            }
+        }
+
         for(const nv_pv of nv_disc.avaliacoes){
             const pv = disc.avaliacoes.find(item => item.nome === nv_pv.nome)
             if(pv == undefined){
